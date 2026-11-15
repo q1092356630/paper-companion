@@ -13,7 +13,7 @@ export function DesktopWidget(){
  useEffect(()=>{
   let alive=true;const refresh=()=>api.widgetData().then(value=>{if(alive){setData(value);setError('')}}).catch(e=>{if(alive)setError(e.message)});
   refresh();const off=api.onUpdate(value=>setData(value));const timer=setInterval(refresh,60000);
-  function key(e){if(!e.metaKey||e.altKey||e.shiftKey)return;const {paper,navigate,openPdf}=actions.current;if(e.key.toLowerCase()==='k'){e.preventDefault();if(paper?.hasCard)navigate('card',paper.id)}if(e.key.toLowerCase()==='o'){e.preventDefault();if(paper?.pdfReady)openPdf(paper.id)}}
+  function key(e){if(!(e.metaKey||e.ctrlKey)||e.altKey||e.shiftKey)return;const {paper,navigate,openPdf}=actions.current;if(e.key.toLowerCase()==='k'){e.preventDefault();if(paper?.hasCard)navigate('card',paper.id)}if(e.key.toLowerCase()==='o'){e.preventDefault();if(paper?.pdfReady)openPdf(paper.id)}}
   window.addEventListener('keydown',key);window.addEventListener('focus',refresh);
   return()=>{alive=false;off();clearInterval(timer);window.removeEventListener('keydown',key);window.removeEventListener('focus',refresh)};
  },[]);

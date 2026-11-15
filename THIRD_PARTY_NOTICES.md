@@ -8,7 +8,7 @@ This is a Windows/macOS source distribution. Application source is supplied in t
 | BabelDOC | 0.6.2 | AGPL-3.0 — https://github.com/funstory-ai/BabelDOC |
 | PyMuPDF | 1.25.2 | AGPL-3.0 — https://github.com/pymupdf/PyMuPDF |
 | RapidOCR | 3.9.2 | Apache-2.0 — https://github.com/RapidAI/RapidOCR |
-| ONNX Runtime | 1.30.0 | MIT — https://github.com/microsoft/onnxruntime |
+| ONNX Runtime | 1.30.0 (Windows / Apple Silicon), 1.23.2 (Intel Mac) | MIT — https://github.com/microsoft/onnxruntime |
 | OpenCV wheels | 4.11.0.86 | Apache-2.0 and bundled notices — https://github.com/opencv/opencv-python |
 | NumPy | 2.2.6 | BSD-3-Clause and bundled notices — https://github.com/numpy/numpy |
 | PDF.js | 6.3.289 | Apache-2.0 — https://github.com/mozilla/pdf.js |

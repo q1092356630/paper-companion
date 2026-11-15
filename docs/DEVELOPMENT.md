@@ -13,3 +13,5 @@ GitHub Actions 的分支构建产物保留 14 天，正式版本通过 GitHub Re
 默认分发没有 Developer ID、公证或 Windows 代码签名。如后续配置正式签名，请仅使用 GitHub Secrets，不能将证书、私钥或密码写入仓库。原生 WidgetKit 代码只保留作 macOS 开发参考，通用包不构建或安装该扩展。
 
 网页原型仍保留。`pnpm build` 后才能运行包括 Sites 产物检查在内的 `pnpm test`；桌面专项使用 `pnpm test:desktop`。不要将原型的浏览器数据说成桌面或 Zotero 的真实数据。
+
+也可在 Actions 选择 `Publish verified build`，填写当前 main 上成功的 `Build desktop releases` 运行 ID。它核对提交一致性、三个平台包和 SHA-256 后发布预览版，无需重复构建。

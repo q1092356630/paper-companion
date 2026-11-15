@@ -52,7 +52,7 @@ test('emptying a captured trash list clears all its items and leaves the active 
 
 test('failed disk cleanup remains visible and retryable; incomplete papers cannot be restored',async t=>{
  const {store,a,previewCache}=await setup(t);await store.trash(a.id);
- const result=await purgeTrashedDocuments({store,ids:[a.id],previewCache,remove:async(file,options)=>{if(file.includes('/indexes/'))throw new Error('Disk is busy');await fs.rm(file,options)}});
+ const result=await purgeTrashedDocuments({store,ids:[a.id],previewCache,remove:async(file,options)=>{if(file.includes(path.sep+'indexes'+path.sep))throw new Error('Disk is busy');await fs.rm(file,options)}});
  assert.deepEqual(result.deleted,[]);assert.equal(result.failed[0].id,a.id);
  assert.equal((await store.list({deleted:true}))[0].purgePending,true);
  await assert.rejects(store.restore(a.id),/永久清除尚未完成/);

@@ -1,0 +1,44 @@
+name: Publish verified build
+on:
+  workflow_dispatch:
+    inputs:
+      build_run:
+        description: Successful Build desktop releases run ID for current main
+        required: true
+        type: string
+permissions:
+  contents: write
+  actions: read
+jobs:
+  publish:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify successful build belongs to current commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BUILD_RUN: ${{ inputs.build_run }}
+        run: |
+          [[ "$BUILD_RUN" =~ ^[0-9]+$ ]]
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/$BUILD_RUN" > run.json
+          node -e 'const r=require("./run.json"); if(r.conclusion!=="success" || r.head_sha!==process.env.GITHUB_SHA || r.path!==".github/workflows/build.yml" || r.event==="pull_request") process.exit(1)'
+      - uses: actions/download-artifact@v4
+        with:
+          run-id: ${{ inputs.build_run }}
+          github-token: ${{ github.token }}
+          pattern: PaperCompanion-*
+          path: artifacts
+          merge-multiple: true
+      - name: Verify all three platform archives
+        run: |
+          node -e 'const fs=require("fs"),v=require("./package.json").version; for(const p of ["windows-x64","mac-arm64","mac-x64"]){const f="artifacts/PaperCompanion-"+v+"-"+p+".zip"; if(!fs.statSync(f).size || !fs.existsSync(f+".sha256")) process.exit(1)}'
+          cd artifacts
+          sha256sum --check *.sha256
+      - name: Publish preview release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version=$(node -p 'require("./package.json").version')
+          gh release create "v$version" artifacts/* --draft --prerelease --target "$GITHUB_SHA" --title "文献伴读 v$version · Windows / macOS" --notes-file docs/RELEASE_NOTES.md
+          gh release edit "v$version" --draft=false
