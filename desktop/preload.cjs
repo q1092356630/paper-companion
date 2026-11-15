@@ -1,0 +1,6 @@
+const {contextBridge,ipcRenderer}=require('electron');
+const methods=['refreshPaperMetadata','journalSync','journalStatus','journalTemplate','journalImport','widgetShow','takeNavigation','importRecommendation','library','trashList','trash','restore','purgeTrash','document','pdf','translatedPdf','exportTranslationPdf','import','indexPDF','index','progress','note','removeNote','translateSelection','cancelSelection','chat','translate','cancel','summarize','saveCard','export','exportCardHtml','exportCardFile','copyCard','settings','saveSettings','testModel','testTranslation','zoteroList','zoteroAttachments','zoteroImport','zoteroWrite','weekly','discover','openUrl','revealData'];
+const api=Object.fromEntries(methods.map(name=>[name,async(...args)=>{const response=await ipcRenderer.invoke('paper:'+name,...args);if(!response.ok)throw new Error(response.error);return response.value}]));
+api.onTask=callback=>{const listener=(_event,payload)=>callback(payload);ipcRenderer.on('paper:task',listener);return()=>ipcRenderer.removeListener('paper:task',listener)};
+api.onNavigate=callback=>{const listener=(_event,data)=>callback(data);ipcRenderer.on('paper:navigate',listener);return()=>ipcRenderer.removeListener('paper:navigate',listener)};
+contextBridge.exposeInMainWorld('paperDesk',api);

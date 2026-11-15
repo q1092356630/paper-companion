@@ -1,0 +1,8 @@
+* text=auto
+*.mjs text eol=lf
+*.cjs text eol=lf
+*.py text eol=lf
+*.yml text eol=lf
+*.command text eol=lf
+*.pdf binary
+*.png binary

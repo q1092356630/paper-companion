@@ -1,0 +1,13 @@
+import fs from 'node:fs/promises';
+import {createRequire} from 'node:module';
+import path from 'node:path';
+import {build} from 'vite';
+const require=createRequire(import.meta.url);
+await fs.mkdir('dist/client',{recursive:true});
+const pdfRoot=path.dirname(require.resolve('pdfjs-dist/package.json'));
+await build({base:'./'});
+for(const folder of ['cmaps','standard_fonts','wasm'])await fs.cp(path.join(pdfRoot,folder),path.join('dist/client/pdf-assets',folder),{recursive:true});
+const html=await fs.readFile('dist/client/index.html','utf8');
+await fs.writeFile('dist/client/index.html',html.replace('<head>',`<head><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data: blob:; connect-src 'self' blob:; object-src 'none'; base-uri 'none'">`));
+console.log('Desktop renderer built with local PDF assets.');
+await fs.copyFile('src/desktop/reading-card.css','dist/client/reading-card.css');

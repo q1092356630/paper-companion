@@ -1,0 +1,41 @@
+{
+  "name": "paper-companion",
+  "version": "0.3.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && node scripts/prepare-sites-build.mjs",
+    "preview": "vite preview",
+    "test:sites": "node --test tests/sites-worker.test.mjs",
+    "build:desktop": "node scripts/build-desktop.mjs",
+    "start:desktop": "electron .",
+    "package:desktop": "node scripts/package-desktop.mjs",
+    "test:desktop": "node scripts/test.mjs --desktop",
+    "build:native-widget": "node scripts/build-native-widget.mjs",
+    "test": "node scripts/test.mjs",
+    "setup:pdf": "node scripts/prepare-pdf-runtime.mjs",
+    "test:runtime": "node scripts/smoke-runtime.mjs",
+    "release:archive": "node scripts/archive-release.mjs"
+  },
+  "dependencies": {
+    "@phosphor-icons/react": "2.1.10",
+    "@vitejs/plugin-react": "5.0.4",
+    "pdfjs-dist": "6.3.289",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "vite": "6.4.2"
+  },
+  "devDependencies": {
+    "@electron/packager": "20.3.0",
+    "electron": "44.4.5"
+  },
+  "main": "desktop/main.cjs",
+  "description": "文献伴读：Windows / macOS 双语 PDF 精读与 AI 阅读卡片",
+  "license": "AGPL-3.0-only",
+  "author": "Paper Companion contributors",
+  "packageManager": "pnpm@11.25.0",
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}
