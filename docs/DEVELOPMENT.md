@@ -8,10 +8,12 @@
 - `scripts/package-desktop.mjs` 只接受与运行环境 manifest 一致的 OS/CPU，打包后复测包内 Python。
 - `scripts/archive-release.mjs` 生成 ZIP 和 SHA-256。
 
-GitHub Actions 的分支构建产物保留 14 天，正式版本通过 GitHub Releases 长期分发。发布时先修改 `package.json` 版本、重新生成锁文件，并更新 `docs/RELEASE_NOTES.md`，再推送匹配的 `v*` 标签。三个平台全部成功才发布。
+GitHub Actions 的分支构建产物保留 14 天，发布版本通过 GitHub Releases 长期分发。发布时先修改 `package.json` 版本、重新生成锁文件，并更新 `docs/RELEASE_NOTES.md`，再提交到 main。三个平台全部成功后，`Publish verified build` 自动校验并发布预览版，已有版本不会覆盖。也支持推送匹配的 `v*` 标签重新构建发布。
 
 默认分发没有 Developer ID、公证或 Windows 代码签名。如后续配置正式签名，请仅使用 GitHub Secrets，不能将证书、私钥或密码写入仓库。原生 WidgetKit 代码只保留作 macOS 开发参考，通用包不构建或安装该扩展。
 
 网页原型仍保留。`pnpm build` 后才能运行包括 Sites 产物检查在内的 `pnpm test`；桌面专项使用 `pnpm test:desktop`。不要将原型的浏览器数据说成桌面或 Zotero 的真实数据。
 
-也可在 Actions 选择 `Publish verified build`，填写当前 main 上成功的 `Build desktop releases` 运行 ID。它核对提交一致性、三个平台包和 SHA-256 后发布预览版，无需重复构建。
+也可在 Actions 选择 `Publish verified build`，填写当前 main 上成功的 `Build desktop releases` 运行 ID。它核对应用代码一致性、三个平台包和 SHA-256 后发布预览版，无需重复构建。只有发布流程文件本身允许与已测试提交不同，Release 说明会记录实际构建提交与运行链接。
+
+如果 Actions 网页暂时不可用，也可以创建 `publish/<成功构建运行ID>` 分支重试发布。发布流程始终检出 main 并验证对应构建来源。不得用该分支触发来自分叉仓库、PR 或失败构建的发布。

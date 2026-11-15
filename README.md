@@ -71,7 +71,7 @@ pnpm release:archive
 
 输出在 `release/`。Windows Python 与 macOS Python 不通用，不能直接把 Mac 运行环境复制进 Windows 包。`setup:pdf` 自动下载独立 Python，安装锁定依赖，准备公共资源，并验证含空格及中文路径下的迁移运行。
 
-GitHub Actions 分别在 Windows x64、macOS arm64 和 macOS x64 上测试、构建。推送 `v*` 标签后，三个构建全部成功才发布 Release。运行环境和安装包不提交到 Git 历史。版本发布细节见 [开发说明](docs/DEVELOPMENT.md)。
+GitHub Actions 分别在 Windows x64、macOS arm64 和 macOS x64 上测试、构建。main 上的新版本通过三个平台构建后自动发布预览版；已有版本不会被覆盖。也支持推送 `v*` 标签构建发布。运行环境和安装包不提交到 Git 历史。版本发布细节见 [开发说明](docs/DEVELOPMENT.md)。
 
 ## 测试范围
 
